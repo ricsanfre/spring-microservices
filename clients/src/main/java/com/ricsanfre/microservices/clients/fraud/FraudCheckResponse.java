@@ -1,4 +1,4 @@
-package com.ricsanfre.microservices.customer;
+package com.ricsanfre.microservices.clients.fraud;
 
 public record FraudCheckResponse(
         Boolean isFraudster

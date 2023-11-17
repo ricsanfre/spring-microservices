@@ -1,5 +1,7 @@
 package com.ricsanfre.microservices.customer;
 
+import com.ricsanfre.microservices.clients.fraud.FraudCheckResponse;
+import com.ricsanfre.microservices.clients.fraud.FraudClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -9,10 +11,13 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final RestTemplate restTemplate;
 
+    private final FraudClient fraudClient;
+
     public CustomerService(CustomerRepository customerRepository,
-                           RestTemplate restTemplate) {
+                           RestTemplate restTemplate, FraudClient fraudClient) {
         this.customerRepository = customerRepository;
         this.restTemplate = restTemplate;
+        this.fraudClient = fraudClient;
     }
 
 
@@ -31,11 +36,7 @@ public class CustomerService {
         // Save customer. Save and flush so ge can obtain customer Id afterwards
         customerRepository.saveAndFlush(customer);
         // Check if fraudster using fraud microservice
-        FraudCheckResponse fraudCheckResponse = restTemplate.getForObject(
-                "http://FRAUD/api/v1/fraud-check/{customerId}",
-                FraudCheckResponse.class,
-                customer.getId()
-        );
+        FraudCheckResponse fraudCheckResponse= fraudClient.isFraudster(customer.getId());
         if(fraudCheckResponse.isFraudster()) {
             throw new IllegalStateException("Fraudster");
         }
