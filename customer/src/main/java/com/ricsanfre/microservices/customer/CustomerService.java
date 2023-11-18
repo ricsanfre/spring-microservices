@@ -2,8 +2,13 @@ package com.ricsanfre.microservices.customer;
 
 import com.ricsanfre.microservices.clients.fraud.FraudCheckResponse;
 import com.ricsanfre.microservices.clients.fraud.FraudClient;
+import com.ricsanfre.microservices.clients.notification.NotificationClient;
+import com.ricsanfre.microservices.clients.notification.NotificationRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class CustomerService {
@@ -13,11 +18,14 @@ public class CustomerService {
 
     private final FraudClient fraudClient;
 
+    private final NotificationClient notificationClient;
+
     public CustomerService(CustomerRepository customerRepository,
-                           RestTemplate restTemplate, FraudClient fraudClient) {
+                           RestTemplate restTemplate, FraudClient fraudClient, NotificationClient notificationClient) {
         this.customerRepository = customerRepository;
         this.restTemplate = restTemplate;
         this.fraudClient = fraudClient;
+        this.notificationClient = notificationClient;
     }
 
 
@@ -41,7 +49,16 @@ public class CustomerService {
             throw new IllegalStateException("Fraudster");
         }
 
-        // todo: send Notification
+        // Send Notification
+        // todo: make it async (i.e using queue)
+        NotificationRequest notification = new NotificationRequest(
+                customer.getId(),
+                customer.getEmail(),
+                "My World",
+                String.format("Hi %s, welcome to my World...",customer.getFirstName()),
+                LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
+        );
+        notificationClient.sendNotification(notification);
 
     }
 }
