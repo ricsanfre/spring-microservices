@@ -20,3 +20,20 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+management:
+  # No sampling configuration
+  tracing:
+    sampling:
+      probability: 1.0
+  # export to a zipkin server
+
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+
+# Adding traceId and SpanId to logs
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"

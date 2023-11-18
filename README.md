@@ -4,6 +4,10 @@
 
 - Microservices Discovery with Eureka Server.
 - Microservices REST clients with OpenFeign
+- Distributed tracing with Springboot actuator and micrometer
+  - Exporting traces to zipkin server
+
+  
 
 ## Build
 
@@ -23,3 +27,5 @@ Maven multi-module project:
 - [Microservices Discovery Service: Eureka ](https://cloud.spring.io/spring-cloud-netflix/reference/html/)
 - [Sprig Cloud Open Feign](https://spring.io/projects/spring-cloud-openfeign)
 - [Spring-boot app banner generator](https://devops.datenkollektiv.de/banner.txt/index.html)
+- [Spring-boot Distributing tracing](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#actuator.micrometer-tracing)
+- [Zipkin](https://zipkin.io/)

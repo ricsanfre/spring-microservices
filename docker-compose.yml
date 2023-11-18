@@ -28,8 +28,18 @@ services:
       - db
     restart: unless-stopped
 
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - spring
+    restart: unless-stopped
 networks:
   db:
+    driver: bridge
+  spring:
     driver: bridge
 volumes:
   postgres:
