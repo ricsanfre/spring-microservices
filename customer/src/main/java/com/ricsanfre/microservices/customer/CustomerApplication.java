@@ -7,7 +7,12 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 // @EnableDiscoveryClient. Use Eurekaserver for discovering other microservices
 // @EnableFeignClients. Use OpenFeign as REST Client
-@SpringBootApplication
+@SpringBootApplication(
+        scanBasePackages = {
+                "com.ricsanfre.microservices.customer",
+                "com.ricsanfre.microservices.amqp"
+        }
+)
 @EnableDiscoveryClient
 @EnableFeignClients(
         basePackages = "com.ricsanfre.microservices.clients"

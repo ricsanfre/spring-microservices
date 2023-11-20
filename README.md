@@ -5,6 +5,7 @@
 - Distributed tracing with Springboot actuator and micrometer
     - Exporting traces to zipkin server
 - API gateway with Spring Cloud
+- Message queue with Rabbit MQ
 
 ## Distributed tracing
 
@@ -40,7 +41,7 @@ See details in spring boot documentation: [Spring-boot Distributing tracing](htt
      <groupId>io.github.openfeign</groupId>
      <artifactId>feign-micrometer</artifactId>
   </dependency>
-  ```xml
+  ```
 
 - Configure application:
 
@@ -59,6 +60,7 @@ See details in spring boot documentation: [Spring-boot Distributing tracing](htt
     pattern:
       level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
   ```
+  
 
 ## Build
 
@@ -67,10 +69,7 @@ Maven multi-module project:
 - Generate basic Maven parent project
 
   ```
-
-mvn archetype:generate -DgroupId=com.ricsanfre.microservices -DartifactId=microservices
--DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false
-
+  mvn archetype:generate -DgroupId=com.ricsanfre.microservices -DartifactId=microservices -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false
   ```
 
 
@@ -84,3 +83,4 @@ mvn archetype:generate -DgroupId=com.ricsanfre.microservices -DartifactId=micros
 - [Spring-boot Distributing tracing](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#actuator.micrometer-tracing)
 - [Zipkin](https://zipkin.io/)
 - [Spring Cloud gateway](https://spring.io/projects/spring-cloud-gateway)
+- [Configuring RabbitMQ with SpringBoot](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#messaging.amqp)

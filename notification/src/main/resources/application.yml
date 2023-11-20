@@ -15,6 +15,10 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
+  # Rabbit MQ server
+  rabbitmq:
+    addresses: localhost:5672
+
 eureka:
   client:
     service-url:
@@ -30,8 +34,19 @@ management:
     tracing:
       endpoint: http://localhost:9411/api/v2/spans
 
+
 # Adding traceId and SpanId to logs
 logging:
   pattern:
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+# RabbitMQ config
+rabbitmq:
+  exchanges:
+    internal: internal.exchange
+  queues:
+    notification: notification.queue
+  routing-keys:
+    internal-notification: internal.notification.routing-key
+
 

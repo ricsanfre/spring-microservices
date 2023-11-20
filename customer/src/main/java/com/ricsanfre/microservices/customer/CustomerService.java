@@ -1,5 +1,6 @@
 package com.ricsanfre.microservices.customer;
 
+import com.ricsanfre.microservices.amqp.RabbitMQMessageProducer;
 import com.ricsanfre.microservices.clients.fraud.FraudCheckResponse;
 import com.ricsanfre.microservices.clients.fraud.FraudClient;
 import com.ricsanfre.microservices.clients.notification.NotificationClient;
@@ -14,18 +15,18 @@ import java.time.format.DateTimeFormatter;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final RestTemplate restTemplate;
 
     private final FraudClient fraudClient;
 
-    private final NotificationClient notificationClient;
+
+    private final RabbitMQMessageProducer rabbitMQMessageProducer;
 
     public CustomerService(CustomerRepository customerRepository,
-                           RestTemplate restTemplate, FraudClient fraudClient, NotificationClient notificationClient) {
+                           FraudClient fraudClient,
+                           RabbitMQMessageProducer rabbitMQMessageProducer) {
         this.customerRepository = customerRepository;
-        this.restTemplate = restTemplate;
         this.fraudClient = fraudClient;
-        this.notificationClient = notificationClient;
+        this.rabbitMQMessageProducer = rabbitMQMessageProducer;
     }
 
 
@@ -50,7 +51,6 @@ public class CustomerService {
         }
 
         // Send Notification
-        // todo: make it async (i.e using queue)
         NotificationRequest notification = new NotificationRequest(
                 customer.getId(),
                 customer.getEmail(),
@@ -58,7 +58,10 @@ public class CustomerService {
                 String.format("Hi %s, welcome to my World...",customer.getFirstName()),
                 LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
         );
-        notificationClient.sendNotification(notification);
+        rabbitMQMessageProducer.publish(
+                notification,
+                "internal.exchange",
+                "internal.notification.routing-key");
 
     }
 }
