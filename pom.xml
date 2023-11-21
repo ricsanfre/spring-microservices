@@ -71,13 +71,36 @@
     <build>
         <pluginManagement>
             <plugins>
+                <!--
+                  spring-boot-maven-plugin.
+                  https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/
+                  Repacking to have all code, including dependencies, into a single jar
+                  Executable jar file: with command java -jar executable.jar
+                -->
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring.boot.maven.plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
-
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>
