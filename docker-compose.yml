@@ -47,30 +47,30 @@ services:
       - spring
     restart: unless-stopped
 
-  eureka-server:
-    container_name: eureka-server
-    image: ricsanfre/microservices-eureka-server
-    ports:
-      - "8761:8761"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    networks:
-      - spring
-    depends_on:
-      - zipkin
-
-  api-gateway:
-    container_name: api-gateway
-    image: ricsanfre/microservices-api-gateway
-    ports:
-      - "8083:8083"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    networks:
-      - spring
-    depends_on:
-      - zipkin
-      - eureka-server
+#  eureka-server:
+#    container_name: eureka-server
+#    image: ricsanfre/microservices-eureka-server
+#    ports:
+#      - "8761:8761"
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    networks:
+#      - spring
+#    depends_on:
+#      - zipkin
+#
+#  api-gateway:
+#    container_name: api-gateway
+#    image: ricsanfre/microservices-api-gateway
+#    ports:
+#      - "8083:8083"
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    networks:
+#      - spring
+#    depends_on:
+#      - zipkin
+#      - eureka-server
 
   fraud:
     container_name: fraud
@@ -84,7 +84,7 @@ services:
       - db
     depends_on:
       - zipkin
-      - eureka-server
+      # - eureka-server
       - db
 
   notification:
@@ -99,7 +99,7 @@ services:
       - db
     depends_on:
       - zipkin
-      - eureka-server
+      # - eureka-server
       - db
       - rabbitmq
 
@@ -115,7 +115,7 @@ services:
       - db
     depends_on:
       - zipkin
-      - eureka-server
+      # - eureka-server
       - db
       - rabbitmq
       - fraud
