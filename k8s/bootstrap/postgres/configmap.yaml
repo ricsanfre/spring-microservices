@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: postgres
+data:
+  POSTGRES_DB: "ricsanfre"
+  POSTGRES_USER: "ricsanfre"
+  POSTGRES_PASSWORD: "password"
+
+  

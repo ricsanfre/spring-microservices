@@ -73,6 +73,16 @@ Maven multi-module project:
   ```
 
 
+## Kuberentes
+
+Create a local cluster using [K3D](https://k3d.io/)
+
+- Start k3d cluster
+
+  ```shell
+  k3d cluster create -c k3d-cluster.yml
+  ```
+
 ## References
 
 - [Microservices with Spring Cloud](https://spring.io/microservices)
