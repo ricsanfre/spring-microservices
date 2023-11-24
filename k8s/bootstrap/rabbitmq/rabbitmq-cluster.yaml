@@ -1,7 +1,7 @@
 apiVersion: rabbitmq.com/v1beta1
 kind: RabbitmqCluster
 metadata:
-  name: rabbitmqcluster
+  name: rabbitmq
   namespace: rabbitmq
 
 spec:
@@ -17,3 +17,7 @@ spec:
     limits:
       cpu: 500m
       memory: 512Mi
+#  rabbitmq:
+#    additionalConfig: |
+#      default_user=guest
+#      default_pass=guest
