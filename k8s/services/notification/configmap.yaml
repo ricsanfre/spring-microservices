@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notification-config
+  namespace: services
+data:
+  CLIENTS_FRAUD_URL: "http://fraud"
+  CLIENTS_NOTIFICATION_URL: "http://notification"
+  CLIENTS_CUSTOMER_URL: "http://customer"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres.postgres:5432/notification"
+  SPRING_RABBITMQ_ADDRESSES: "rabbitmq.rabbitmq:5672"
+  SPRING_RABBITMQ_USERNAME: "ricsanfre"
+  SPRING_RABBITMQ_PASSWORD: "password"
+  MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: "http://zipkin.zipkin:9411/api/v2/spans"
+
+
+  

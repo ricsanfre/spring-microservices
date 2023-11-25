@@ -78,7 +78,11 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - CLIENTS_FRAUD_URL=http://fraud:8081
+      - CLIENTS_NOTIFICATION_URL=http://notification:8081
+      - CLIENTS_CUSTOMER_URL=http://customer:8081
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/fraud
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
     networks:
       - spring
       - db
@@ -93,7 +97,12 @@ services:
     ports:
       - "8082:8082"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - CLIENTS_FRAUD_URL=http://fraud:8081
+      - CLIENTS_NOTIFICATION_URL=http://notification:8081
+      - CLIENTS_CUSTOMER_URL=http://customer:8081
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/notification
+      - SPRING_RABBITMQ_ADDRESSES=rabbitmq:5672
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
     networks:
       - spring
       - db
@@ -109,7 +118,12 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - CLIENTS_FRAUD_URL=http://fraud:8081
+      - CLIENTS_NOTIFICATION_URL=http://notification:8081
+      - CLIENTS_CUSTOMER_URL=http://customer:8081
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/customer
+      - SPRING_RABBITMQ_ADDRESSES=rabbitmq:5672
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
     networks:
       - spring
       - db

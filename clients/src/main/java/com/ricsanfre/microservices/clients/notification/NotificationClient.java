@@ -8,11 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(
         name = "notification",
-        url = "${client.notification.url}"
+        url = "${clients.notification.url}"
 )
-@PropertySources({
-        @PropertySource("classpath:clients-${spring.profiles.active}.properties")
-})
 public interface NotificationClient {
 
     @PostMapping("api/v1/notification")

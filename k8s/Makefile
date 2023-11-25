@@ -27,8 +27,12 @@ get-rabbitmq-admin-credentials:
 	kubectl -n rabbitmq get secret rabbitmq-default-user -o jsonpath="{.data.username}" | base64 --decode; echo
 	kubectl -n rabbitmq get secret rabbitmq-default-user -o jsonpath="{.data.password}" | base64 --decode; echo
 
+# TODO: Configure creation of databases customer
 configure-postgres:
-	kubectl exec -it postgres-0 -n postgres -- psql -U ricsanfre
+	kubectl exec -it postgres-0 -n postgres -- psql -U ricsanfre \
+		-c '\set AUTOCOMMIT on\ndrop database if exists customer; create database customer;' \
+		-c '\set AUTOCOMMIT on\ndrop database if exists notification; create database notification' \
+		-c '\set AUTOCOMMIT on\ndrop database if exists fraud; create database fraud;'
 
 # Additional user need to be created. guest user is not allowed to have remote connections
 configure-rabbitmq:

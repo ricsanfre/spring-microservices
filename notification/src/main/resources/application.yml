@@ -18,6 +18,8 @@ spring:
   # Rabbit MQ server
   rabbitmq:
     addresses: localhost:5672
+    username: guest
+    password: guest
 
 eureka:
   client:
@@ -50,4 +52,11 @@ rabbitmq:
   routing-keys:
     internal-notification: internal.notification.routing-key
 
-
+# Microservices URL
+clients:
+  customer:
+    url: http://localhost:8080
+  fraud:
+    url: http://localhost:8081
+  notification:
+    url: http://localhost:8082

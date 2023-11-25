@@ -36,3 +36,12 @@ management:
 logging:
   pattern:
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+# Microservices URL
+clients:
+  customer:
+    url: http://localhost:8080
+  fraud:
+    url: http://localhost:8081
+  notification:
+    url: http://localhost:8082

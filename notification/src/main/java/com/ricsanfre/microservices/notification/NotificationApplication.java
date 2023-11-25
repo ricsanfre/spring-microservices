@@ -14,9 +14,6 @@ import org.springframework.context.annotation.PropertySources;
                 "com.ricsanfre.microservices.amqp"
         }
 )
-@PropertySources({
-        @PropertySource("classpath:clients-${spring.profiles.active}.properties")
-})
 public class NotificationApplication {
     public static void main(String[] args) {
 
