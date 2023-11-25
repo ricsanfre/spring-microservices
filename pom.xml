@@ -18,7 +18,9 @@
         <module>clients</module>
         <module>notification</module>
         <module>api-gateway</module>
-        <module>amqp</module>
+        <module>message-producer</module>
+        <module>kafka-producer</module>
+        <module>kafka-consumer</module>
     </modules>
 
     <properties>

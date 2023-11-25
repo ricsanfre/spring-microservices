@@ -21,6 +21,10 @@ spring:
     addresses: localhost:5672
     username: guest
     password: guest
+
+  # Kafka
+  kafka:
+    bootstrap-servers: localhost:19092
 eureka:
   client:
     service-url:
@@ -38,6 +42,10 @@ management:
     tracing:
       endpoint: http://localhost:9411/api/v2/spans
 
+# Kafka config
+kafka:
+  notification:
+    topic: notification
 
 # Adding traceId and SpanId to logs
 logging:
@@ -52,3 +60,8 @@ clients:
     url: http://localhost:8081
   notification:
     url: http://localhost:8082
+
+# Message Bus
+message:
+  broker:
+    type: kafka

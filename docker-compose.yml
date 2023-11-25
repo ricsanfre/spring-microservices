@@ -13,20 +13,20 @@ services:
     networks:
       - db
     restart: unless-stopped
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    ports:
-      - "5050:80"
-    networks:
-      - db
-    restart: unless-stopped
+  #  pgadmin:
+  #    container_name: pgadmin
+  #    image: dpage/pgadmin4
+  #    environment:
+  #      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+  #      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+  #      PGADMIN_CONFIG_SERVER_MODE: 'False'
+  #    volumes:
+  #      - pgadmin:/var/lib/pgadmin
+  #    ports:
+  #      - "5050:80"
+  #    networks:
+  #      - db
+  #    restart: unless-stopped
 
   zipkin:
     container_name: zipkin
@@ -47,92 +47,150 @@ services:
       - spring
     restart: unless-stopped
 
-#  eureka-server:
-#    container_name: eureka-server
-#    image: ricsanfre/microservices-eureka-server
+  #  eureka-server:
+  #    container_name: eureka-server
+  #    image: ricsanfre/microservices-eureka-server
+  #    ports:
+  #      - "8761:8761"
+  #    environment:
+  #      - SPRING_PROFILES_ACTIVE=docker
+  #    networks:
+  #      - spring
+  #    depends_on:
+  #      - zipkin
+  #
+  #  api-gateway:
+  #    container_name: api-gateway
+  #    image: ricsanfre/microservices-api-gateway
+  #    ports:
+  #      - "8083:8083"
+  #    environment:
+  #      - SPRING_PROFILES_ACTIVE=docker
+  #    networks:
+  #      - spring
+  #    depends_on:
+  #      - zipkin
+  #      - eureka-server
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - spring
+    ports:
+      - "2181:2181"
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:latest
+    hostname: schema-registry
+    container_name: schema-registry
+    depends_on:
+      - kafka-broker-1
+    ports:
+      - "8084:8081"
+    networks:
+      - spring
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
+      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka-broker-1:9092,PLAINTEXT_INTERNAL://localhost:19092
+      SCHEMA_REGISTRY_DEBUG: 'true'
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    hostname: kafdrop
+    container_name: kafdrop
+    restart: "no"
+    ports:
+      - "9000:9000"
+    networks:
+      - spring
+    environment:
+      KAFKA_BROKERCONNECT: "kafka-broker-1:9092"
+    depends_on:
+    - kafka-broker-1
+
+  kafka-broker-1:
+    image: confluentinc/cp-kafka:latest
+    hostname: kafka-broker-1
+    container_name: kafka-broker-1
+    ports:
+      - "19092:19092"
+    networks:
+      - spring
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-1:9092,PLAINTEXT_INTERNAL://localhost:19092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+#  fraud:
+#    container_name: fraud
+#    image: ricsanfre/microservices-fraud
 #    ports:
-#      - "8761:8761"
+#      - "8081:8081"
 #    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
+#      - CLIENTS_FRAUD_URL=http://fraud:8081
+#      - CLIENTS_NOTIFICATION_URL=http://notification:8081
+#      - CLIENTS_CUSTOMER_URL=http://customer:8081
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/fraud
+#      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
 #    networks:
 #      - spring
+#      - db
 #    depends_on:
 #      - zipkin
+#      # - eureka-server
+#      - db
 #
-#  api-gateway:
-#    container_name: api-gateway
-#    image: ricsanfre/microservices-api-gateway
+#  notification:
+#    container_name: notification
+#    image: ricsanfre/microservices-notification
 #    ports:
-#      - "8083:8083"
+#      - "8082:8082"
 #    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
+#      - CLIENTS_FRAUD_URL=http://fraud:8081
+#      - CLIENTS_NOTIFICATION_URL=http://notification:8081
+#      - CLIENTS_CUSTOMER_URL=http://customer:8081
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/notification
+#      - SPRING_RABBITMQ_ADDRESSES=rabbitmq:5672
+#      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
 #    networks:
 #      - spring
+#      - db
 #    depends_on:
 #      - zipkin
-#      - eureka-server
-
-  fraud:
-    container_name: fraud
-    image: ricsanfre/microservices-fraud
-    ports:
-      - "8081:8081"
-    environment:
-      - CLIENTS_FRAUD_URL=http://fraud:8081
-      - CLIENTS_NOTIFICATION_URL=http://notification:8081
-      - CLIENTS_CUSTOMER_URL=http://customer:8081
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/fraud
-      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
-    networks:
-      - spring
-      - db
-    depends_on:
-      - zipkin
-      # - eureka-server
-      - db
-
-  notification:
-    container_name: notification
-    image: ricsanfre/microservices-notification
-    ports:
-      - "8082:8082"
-    environment:
-      - CLIENTS_FRAUD_URL=http://fraud:8081
-      - CLIENTS_NOTIFICATION_URL=http://notification:8081
-      - CLIENTS_CUSTOMER_URL=http://customer:8081
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/notification
-      - SPRING_RABBITMQ_ADDRESSES=rabbitmq:5672
-      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
-    networks:
-      - spring
-      - db
-    depends_on:
-      - zipkin
-      # - eureka-server
-      - db
-      - rabbitmq
-
-  customer:
-    container_name: customer
-    image: ricsanfre/microservices-customer
-    ports:
-      - "8080:8080"
-    environment:
-      - CLIENTS_FRAUD_URL=http://fraud:8081
-      - CLIENTS_NOTIFICATION_URL=http://notification:8081
-      - CLIENTS_CUSTOMER_URL=http://customer:8081
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/customer
-      - SPRING_RABBITMQ_ADDRESSES=rabbitmq:5672
-      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
-    networks:
-      - spring
-      - db
-    depends_on:
-      - zipkin
-      # - eureka-server
-      - db
-      - rabbitmq
-      - fraud
+#      # - eureka-server
+#      - db
+#      - rabbitmq
+#
+#  customer:
+#    container_name: customer
+#    image: ricsanfre/microservices-customer
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      - CLIENTS_FRAUD_URL=http://fraud:8081
+#      - CLIENTS_NOTIFICATION_URL=http://notification:8081
+#      - CLIENTS_CUSTOMER_URL=http://customer:8081
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/customer
+#      - SPRING_RABBITMQ_ADDRESSES=rabbitmq:5672
+#      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+#    networks:
+#      - spring
+#      - db
+#    depends_on:
+#      - zipkin
+#      # - eureka-server
+#      - db
+#      - rabbitmq
+#      - fraud
 
 networks:
   db:

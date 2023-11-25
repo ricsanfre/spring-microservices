@@ -20,7 +20,11 @@ spring:
     addresses: localhost:5672
     username: guest
     password: guest
-
+  # Kafka
+  kafka:
+    bootstrap-servers: localhost:19092
+    consumer:
+      group-id: group1
 eureka:
   client:
     service-url:
@@ -52,6 +56,11 @@ rabbitmq:
   routing-keys:
     internal-notification: internal.notification.routing-key
 
+# Kafka config
+kafka:
+  notification:
+    topic: notification
+
 # Microservices URL
 clients:
   customer:
@@ -60,3 +69,8 @@ clients:
     url: http://localhost:8081
   notification:
     url: http://localhost:8082
+
+# Message Bus
+message:
+  broker:
+    type: rabbitmq

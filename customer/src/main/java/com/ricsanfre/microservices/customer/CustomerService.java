@@ -1,12 +1,12 @@
 package com.ricsanfre.microservices.customer;
 
-import com.ricsanfre.microservices.amqp.RabbitMQMessageProducer;
+import com.ricsanfre.microservices.common.MessageProducer;
 import com.ricsanfre.microservices.clients.fraud.FraudCheckResponse;
 import com.ricsanfre.microservices.clients.fraud.FraudClient;
-import com.ricsanfre.microservices.clients.notification.NotificationClient;
 import com.ricsanfre.microservices.clients.notification.NotificationRequest;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,17 +18,15 @@ public class CustomerService {
 
     private final FraudClient fraudClient;
 
-
-    private final RabbitMQMessageProducer rabbitMQMessageProducer;
+    private final MessageProducer messageProducer;
 
     public CustomerService(CustomerRepository customerRepository,
                            FraudClient fraudClient,
-                           RabbitMQMessageProducer rabbitMQMessageProducer) {
+                           MessageProducer messageProducer) {
         this.customerRepository = customerRepository;
         this.fraudClient = fraudClient;
-        this.rabbitMQMessageProducer = rabbitMQMessageProducer;
+        this.messageProducer = messageProducer;
     }
-
 
     public void registerCustomer(
             CustomerRegistrationRequest request) {
@@ -58,10 +56,15 @@ public class CustomerService {
                 String.format("Hi %s, welcome to my World...",customer.getFirstName()),
                 LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
         );
-        rabbitMQMessageProducer.publish(
+        messageProducer.publish(
                 notification,
                 "internal.exchange",
                 "internal.notification.routing-key");
 
+        messageProducer.publish(
+                notification,
+                "notification",
+                null
+        );
     }
 }
