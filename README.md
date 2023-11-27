@@ -5,7 +5,17 @@
 - Distributed tracing with Springboot actuator and micrometer
     - Exporting traces to zipkin server
 - API gateway with Spring Cloud
-- Message queue with Rabbit MQ
+- Message queue with Rabbit MQ and Kafka
+
+## Message brokers
+
+### Rabbit MQ
+
+See Spring-boot documentation about how to use AMPQ protocol and Rabbit MQ support: (https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#messaging.amqp)
+
+### Apache Kafka 
+
+See Spring-boot documentation about Kafka: (https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#messaging.kafka)
 
 ## Distributed tracing
 
@@ -34,7 +44,7 @@ See details in spring boot documentation: [Spring-boot Distributing tracing](htt
   </dependencies> 
   ```
   
-  Also if OpenFeign is used as rest Client micrometer dependency need to be added:
+  Also, if OpenFeign is used as rest Client micrometer dependency need to be added:
 
   ```xml
   <dependency>
@@ -61,6 +71,13 @@ See details in spring boot documentation: [Spring-boot Distributing tracing](htt
       level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
   ```
   
+### Enable context propagation through Message bus
+
+TraceId can be propagated through Kafka
+See Spring-kafka Micrometer integration documentation: https://docs.spring.io/spring-kafka/reference/kafka/micrometer.html
+
+and Spring-AMQP Micrometer integration documentation: https://docs.spring.io/spring-amqp/docs/current/reference/html/#micrometer-observation 
+
 
 ## Build
 

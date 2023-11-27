@@ -25,11 +25,6 @@ spring:
     bootstrap-servers: localhost:19092
     consumer:
       group-id: group1
-      properties:
-        spring:
-          json:
-            trusted:
-              packages: "*"
 
 eureka:
   client:

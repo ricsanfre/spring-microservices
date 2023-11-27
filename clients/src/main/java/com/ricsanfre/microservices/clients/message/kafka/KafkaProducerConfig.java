@@ -42,6 +42,9 @@ public class KafkaProducerConfig {
     public KafkaTemplate<String,Message> kafkaTemplate(
             ProducerFactory<String,Message> producerFactory
     ) {
-        return new KafkaTemplate<>(producerFactory);
+        KafkaTemplate<String,Message> kafkaTemplate = new KafkaTemplate<>(producerFactory);
+        // Enabling Micrometer Tracing integration. Context propagation
+        kafkaTemplate.setObservationEnabled(true);
+        return kafkaTemplate;
     }
 }

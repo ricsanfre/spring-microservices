@@ -28,6 +28,8 @@ public class RabbitMQConfig {
     @Bean
     public SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory() {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+        // Enabling Micrometer Tracing: Activate context propagation
+        factory.setObservationEnabled(true);
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(jacksonConverter());
         return factory;
@@ -37,6 +39,8 @@ public class RabbitMQConfig {
     public AmqpTemplate amqpTemplate() {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(jacksonConverter());
+        // Enabling Micrometer Tracing: Activate context propagation
+        rabbitTemplate.setObservationEnabled(true);
         return rabbitTemplate;
     }
 
