@@ -1,4 +1,4 @@
-package com.ricsanfre.microservices.clients.notification;
+package com.ricsanfre.microservices.clients.api.notification;
 
 import java.time.LocalDateTime;
 

@@ -1,8 +1,6 @@
-package com.ricsanfre.microservices.clients.notification;
+package com.ricsanfre.microservices.clients.api.notification;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 

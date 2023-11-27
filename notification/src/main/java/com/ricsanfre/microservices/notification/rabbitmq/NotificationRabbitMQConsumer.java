@@ -1,6 +1,6 @@
 package com.ricsanfre.microservices.notification.rabbitmq;
 
-import com.ricsanfre.microservices.clients.notification.NotificationRequest;
+import com.ricsanfre.microservices.clients.message.common.Message;
 import com.ricsanfre.microservices.notification.NotificationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -22,8 +22,8 @@ public class NotificationRabbitMQConsumer {
     }
 
     @RabbitListener(queues = "${rabbitmq.queues.notification}")
-    public void consumer(NotificationRequest notificationRequest) {
-        log.info("Consumed {} from queue", notificationRequest);
-        notificationService.sendNotification(notificationRequest);
+    public void consumer(Message message) {
+        log.info("Consumed {} from queue", message);
+        notificationService.sendNotification(message);
     }
 }

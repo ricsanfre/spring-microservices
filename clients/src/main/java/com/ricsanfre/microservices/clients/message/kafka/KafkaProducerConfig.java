@@ -1,8 +1,10 @@
-package com.ricsanfre.microservices.kafka;
+package com.ricsanfre.microservices.clients.message.kafka;
 
+import com.ricsanfre.microservices.clients.message.common.Message;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -14,6 +16,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@ConditionalOnProperty(
+        value="message.broker.type",
+        havingValue = "kafka",
+        matchIfMissing = true)
 public class KafkaProducerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
@@ -28,13 +34,13 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String,Object> producerFactory() {
+    public ProducerFactory<String, Message> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
     @Bean
-    public KafkaTemplate<String,Object> kafkaTemplate(
-            ProducerFactory<String,Object> producerFactory
+    public KafkaTemplate<String,Message> kafkaTemplate(
+            ProducerFactory<String,Message> producerFactory
     ) {
         return new KafkaTemplate<>(producerFactory);
     }

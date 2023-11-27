@@ -1,4 +1,4 @@
-package com.ricsanfre.microservices.clients.fraud;
+package com.ricsanfre.microservices.clients.api.fraud;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

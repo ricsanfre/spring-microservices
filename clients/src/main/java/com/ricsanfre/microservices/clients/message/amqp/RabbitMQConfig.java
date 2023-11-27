@@ -1,4 +1,4 @@
-package com.ricsanfre.microservices.amqp;
+package com.ricsanfre.microservices.clients.message.amqp;
 
 
 import org.springframework.amqp.core.AmqpTemplate;

@@ -11,12 +11,11 @@ import org.springframework.context.annotation.PropertySources;
 @SpringBootApplication(
         scanBasePackages = {
                 "com.ricsanfre.microservices.customer",
-                "com.ricsanfre.microservices.amqp",
-                "com.ricsanfre.microservices.kafka"
+                "com.ricsanfre.microservices.clients"
         }
 )
 @EnableFeignClients(
-        basePackages = "com.ricsanfre.microservices.clients"
+        basePackages = "com.ricsanfre.microservices.clients.api"
 )
 public class CustomerApplication {
     public static void main(String[] args) {

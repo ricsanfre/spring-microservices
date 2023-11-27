@@ -1,10 +1,9 @@
 package com.ricsanfre.microservices.customer;
 
-import com.ricsanfre.microservices.common.MessageProducer;
-import com.ricsanfre.microservices.clients.fraud.FraudCheckResponse;
-import com.ricsanfre.microservices.clients.fraud.FraudClient;
-import com.ricsanfre.microservices.clients.notification.NotificationRequest;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.ricsanfre.microservices.clients.message.common.Message;
+import com.ricsanfre.microservices.clients.message.common.MessageProducer;
+import com.ricsanfre.microservices.clients.api.fraud.FraudCheckResponse;
+import com.ricsanfre.microservices.clients.api.fraud.FraudClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +18,9 @@ public class CustomerService {
     private final FraudClient fraudClient;
 
     private final MessageProducer messageProducer;
+
+    @Value("${message.broker.type}")
+    private String messageBrokerType;
 
     public CustomerService(CustomerRepository customerRepository,
                            FraudClient fraudClient,
@@ -43,28 +45,32 @@ public class CustomerService {
         // Save customer. Save and flush so ge can obtain customer Id afterwards
         customerRepository.saveAndFlush(customer);
         // Check if fraudster using fraud microservice
-        FraudCheckResponse fraudCheckResponse= fraudClient.isFraudster(customer.getId());
-        if(fraudCheckResponse.isFraudster()) {
+        FraudCheckResponse fraudCheckResponse = fraudClient.isFraudster(customer.getId());
+        if (fraudCheckResponse.isFraudster()) {
             throw new IllegalStateException("Fraudster");
         }
 
         // Send Notification
-        NotificationRequest notification = new NotificationRequest(
+        Message notification = new Message(
                 customer.getId(),
                 customer.getEmail(),
                 "My World",
-                String.format("Hi %s, welcome to my World...",customer.getFirstName()),
+                String.format("Hi %s, welcome to my World...", customer.getFirstName()),
                 LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
         );
-        messageProducer.publish(
-                notification,
-                "internal.exchange",
-                "internal.notification.routing-key");
 
-        messageProducer.publish(
-                notification,
-                "notification",
-                null
-        );
+        if (messageBrokerType.equals("rabbitmq")) {
+            messageProducer.publish(
+                    notification,
+                    "internal.exchange",
+                    "internal.notification.routing-key");
+
+        } else if (messageBrokerType.equals("kafka")) {
+            messageProducer.publish(
+                    notification,
+                    "notification",
+                    null
+            );
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.ricsanfre.microservices.notification;
 
-import com.ricsanfre.microservices.clients.notification.NotificationRequest;
-import com.ricsanfre.microservices.clients.notification.NotificationResponse;
+import com.ricsanfre.microservices.clients.api.notification.NotificationRequest;
+import com.ricsanfre.microservices.clients.api.notification.NotificationResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +23,8 @@ public class NotificationController {
     public NotificationResponse sendNotification(@RequestBody NotificationRequest notificationRequest) {
 
         log.info("new notification received: {}", notificationRequest);
-        return notificationService.sendNotification(notificationRequest);
+
+        return notificationService.sendNotification(notificationRequest.notification());
 
     }
 

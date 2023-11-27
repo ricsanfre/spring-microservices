@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(
         scanBasePackages = {
                 "com.ricsanfre.microservices.notification",
-                "com.ricsanfre.microservices.amqp"
+                "com.ricsanfre.microservices.clients"
         }
 )
 public class NotificationApplication {

@@ -1,6 +1,7 @@
-package com.ricsanfre.microservices.amqp;
+package com.ricsanfre.microservices.clients.message.amqp;
 
-import com.ricsanfre.microservices.common.MessageProducer;
+import com.ricsanfre.microservices.clients.message.common.Message;
+import com.ricsanfre.microservices.clients.message.common.MessageProducer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Component;
 public class RabbitMQMessageProducer implements MessageProducer {
     private final AmqpTemplate amqpTemplate;
 
-    public void publish(Object payload, String exchange, String routingKey) {
+    private void publishRabbitMQ(Object payload, String exchange, String routingKey) {
         log.info("Publishing to {} exchange using routingKey {}. Payload: {}"
                 , exchange, routingKey, payload);
         amqpTemplate.convertAndSend(exchange, routingKey, payload);
@@ -29,4 +30,8 @@ public class RabbitMQMessageProducer implements MessageProducer {
     }
 
 
+    @Override
+    public void publish(Message payload, String exchangeOrTopic, String key) {
+        publishRabbitMQ(payload, exchangeOrTopic, key);
+    }
 }

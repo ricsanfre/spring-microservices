@@ -1,9 +1,8 @@
 package com.ricsanfre.microservices.notification.kafka;
 
-import com.ricsanfre.microservices.clients.notification.NotificationRequest;
+import com.ricsanfre.microservices.clients.message.common.Message;
 import com.ricsanfre.microservices.notification.NotificationService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -26,8 +25,8 @@ public class NotificationKafkaConsumer {
             topics = "${kafka.notification.topic}",
             groupId = "${spring.kafka.consumer.group-id}"
     )
-    public void consumer(String message) {
+    public void consumer(Message message) {
         log.info("Consumed {} from topic", message);
-        // notificationService.sendNotification(notificationRequest);
+        notificationService.sendNotification(message);
     }
 }

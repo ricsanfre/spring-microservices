@@ -1,4 +1,4 @@
-package com.ricsanfre.microservices.notification;
+package com.ricsanfre.microservices.notification.rabbitmq;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

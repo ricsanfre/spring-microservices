@@ -1,7 +1,7 @@
 package com.ricsanfre.microservices.notification;
 
-import com.ricsanfre.microservices.clients.notification.NotificationRequest;
-import com.ricsanfre.microservices.clients.notification.NotificationResponse;
+import com.ricsanfre.microservices.clients.api.notification.NotificationResponse;
+import com.ricsanfre.microservices.clients.message.common.Message;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,16 +18,16 @@ public class NotificationService {
     }
 
 
-    public NotificationResponse sendNotification(NotificationRequest notificationRequest) {
+    public NotificationResponse sendNotification(Message message) {
 
         // todo: validate incoming data
 
         Notification notification = Notification.builder()
-                .toCustomerId(notificationRequest.toCustomerId())
-                .toCustomerEmail(notificationRequest.toCustomerEmail())
-                .sender(notificationRequest.sender())
-                .message(notificationRequest.message())
-                .sentAt(LocalDateTime.parse(notificationRequest.sentAt(),
+                .toCustomerId(message.toCustomerId())
+                .toCustomerEmail(message.toCustomerEmail())
+                .sender(message.sender())
+                .message(message.message())
+                .sentAt(LocalDateTime.parse(message.sentAt(),
                         DateTimeFormatter.ISO_DATE_TIME))
                 .build();
 
