@@ -83,14 +83,20 @@ and Spring-AMQP Micrometer integration documentation: https://docs.spring.io/spr
 
 Maven multi-module project:
 
-- Generate basic Maven parent project
+- Initial scaffolding: Generate basic Maven parent project
 
-  ```
+  ```shell
   mvn archetype:generate -DgroupId=com.ricsanfre.microservices -DartifactId=microservices -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false
   ```
 
 
-## Kuberentes
+- Generate microservices docker images and upload to Docker hub
+
+  ```shell
+  mvn clean package -P build-docker-image
+  ```
+
+## Kubernetes
 
 Create a local cluster using [K3D](https://k3d.io/)
 
@@ -99,6 +105,15 @@ Create a local cluster using [K3D](https://k3d.io/)
   ```shell
   k3d cluster create -c k3d-cluster.yml
   ```
+  
+- Deploy basic services:
+
+  
+
+## TODO
+
+[] Check Spring-cloud kubernetes doc https://docs.spring.io/spring-cloud-kubernetes/docs/current/reference/html/
+[] Configure security between microservices
 
 ## References
 
