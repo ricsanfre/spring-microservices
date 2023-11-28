@@ -37,10 +37,13 @@ management:
     sampling:
       probability: 1.0
   # export to a zipkin server
-
   zipkin:
     tracing:
       endpoint: http://localhost:9411/api/v2/spans
+  # Disable Rabbit MQ health check (only when Kafka is used)
+  health:
+    rabbit:
+      enabled: false
 
 # Kafka config
 kafka:

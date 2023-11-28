@@ -112,8 +112,15 @@ Create a local cluster using [K3D](https://k3d.io/)
 
 ## TODO
 
-[] Check Spring-cloud kubernetes doc https://docs.spring.io/spring-cloud-kubernetes/docs/current/reference/html/
-[] Configure security between microservices
+- [ ] Check Spring-cloud kubernetes doc https://docs.spring.io/spring-cloud-kubernetes/docs/current/reference/html/
+- [ ] Configure security between microservices. OAuth 2.0 + Keycloak as IAM?
+  - References:
+    - Spring APIs and JWT https://www.youtube.com/watch?v=BVdQ3iuovg0
+    - KeyCloak and Springboot https://www.youtube.com/watch?v=vmEWywGzWbA
+- [ ] Replace Zipkin by Tempo (OTEL collection)
+  - Reference: https://programmingtechie.com/2023/09/09/spring-boot3-observability-grafana-stack/
+
+- [ ] Enable metrics, Prometheus integration
 
 ## References
 

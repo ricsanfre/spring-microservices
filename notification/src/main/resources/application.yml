@@ -15,11 +15,13 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
+
   # Rabbit MQ server
   rabbitmq:
     addresses: localhost:5672
     username: guest
     password: guest
+
   # Kafka
   kafka:
     bootstrap-servers: localhost:19092
@@ -41,7 +43,10 @@ management:
   zipkin:
     tracing:
       endpoint: http://localhost:9411/api/v2/spans
-
+  # Disable Rabbit MQ health check (only when Kafka is used)
+  health:
+    rabbit:
+      enabled: false
 
 # Adding traceId and SpanId to logs
 logging:
