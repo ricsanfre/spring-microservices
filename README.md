@@ -117,6 +117,7 @@ Create a local cluster using [K3D](https://k3d.io/)
   - References:
     - Spring APIs and JWT https://www.youtube.com/watch?v=BVdQ3iuovg0
     - KeyCloak and Springboot https://www.youtube.com/watch?v=vmEWywGzWbA
+    - Spring Security OAuth 2 Tutorial https://www.sivalabs.in/spring-security-oauth2-tutorial-introduction/
 - [ ] Replace Zipkin by Tempo (OTEL collection)
   - Reference: https://programmingtechie.com/2023/09/09/spring-boot3-observability-grafana-stack/
 
